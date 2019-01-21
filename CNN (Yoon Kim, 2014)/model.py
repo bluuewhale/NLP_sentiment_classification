@@ -26,6 +26,15 @@ class CnnText(nn.Module):
             nn.Dropout(drop_rate),
             nn.Linear(hid_size, 1),
             )
+            
+    def use_pretrain_embedding(self, weight_matrix, static=False):
+        corpus_size, embed_size = weights_matrix.size()
+
+        # pre-trained 임베딩 행렬 불러오기
+        self.embedding.load_state_dict({'weight': weights_matrix})
+
+        if static :
+            self.embedding.weight.requires_grad = False
 
     def forward(self, x):
         embed = self.embedding(x) # [batch_size, max_length, embed_size]
